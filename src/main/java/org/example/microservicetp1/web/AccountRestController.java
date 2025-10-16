@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class AccountRestController {
@@ -25,6 +26,7 @@ public class AccountRestController {
     }
     @PostMapping("/bankAccounts")
     public BankAccount save(@RequestBody BankAccount bankAccount){
+        if(bankAccount.getId()==null) bankAccount.setId(UUID.randomUUID().toString());
         return bankAccountRepository.save(bankAccount);
 
     }
@@ -32,11 +34,16 @@ public class AccountRestController {
     @PutMapping ("/bankAccounts/{id}")
     public BankAccount update(@PathVariable String id,@RequestBody BankAccount bankAccount){
        BankAccount account=bankAccountRepository.findById(id).orElseThrow();
-       account.setBalance(bankAccount.getBalance());
-       account.setCreatedAt(new Date());
-       account.setType(bankAccount.getType());
-       account.setCurrency(bankAccount.getCurrency());
-       return bankAccountRepository.save(bankAccount);
+        if (bankAccount.getBalance()!=null) account.setBalance(bankAccount.getBalance());
+        if (bankAccount.getCreatedAt()!=null) account.setCreatedAt(new Date());
+        if (bankAccount.getType()!=null)  account.setType(bankAccount.getType());
+        if (bankAccount.getCurrency()!=null) account.setCurrency(bankAccount.getCurrency());
+       return bankAccountRepository.save(account);
 
+    }
+
+    @DeleteMapping("/bankAccounts/{id}")
+    public void deleteAccount(@PathVariable String id){
+         bankAccountRepository.deleteById(id);
     }
 }
