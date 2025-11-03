@@ -1,7 +1,11 @@
 package org.example.microservicetp1.web;
 
+import org.example.microservicetp1.dto.BankAccountRequestDTO;
+import org.example.microservicetp1.dto.BankAccountResponseDTO;
 import org.example.microservicetp1.entities.BankAccount;
+import org.example.microservicetp1.mappers.AccountMapper;
 import org.example.microservicetp1.repositories.BankAccountRepository;
+import org.example.microservicetp1.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +14,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api")
 public class AccountRestController {
     private BankAccountRepository bankAccountRepository;
+
+    private AccountService accountService;
+
+    private AccountMapper accountMapper;
 
     public AccountRestController(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
@@ -25,9 +34,8 @@ public class AccountRestController {
         return bankAccountRepository.findById(id).orElseThrow(()->new RuntimeException(String.format("Bank account with id %s not found", id)));
     }
     @PostMapping("/bankAccounts")
-    public BankAccount save(@RequestBody BankAccount bankAccount){
-        if(bankAccount.getId()==null) bankAccount.setId(UUID.randomUUID().toString());
-        return bankAccountRepository.save(bankAccount);
+    public BankAccountResponseDTO save(@RequestBody BankAccountRequestDTO requestDTO){
+        return accountService.addAccount(requestDTO);
 
     }
 
