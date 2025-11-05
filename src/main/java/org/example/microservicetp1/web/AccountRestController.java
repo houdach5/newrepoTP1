@@ -6,12 +6,10 @@ import org.example.microservicetp1.entities.BankAccount;
 import org.example.microservicetp1.mappers.AccountMapper;
 import org.example.microservicetp1.repositories.BankAccountRepository;
 import org.example.microservicetp1.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
